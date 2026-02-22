@@ -1,11 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Watchlist App</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <h1 class="site-title">Find your film</h1>
+        <a href="watchlist.html" class="header-link">My Watchlist</a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="search-section">
+        <form id="search-form" class="search-form">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search for a movie..."
+            required
+          />
+          <button type="submit" id="search-btn">Search</button>
+        </form>
+      </section>
+
+      <section id="results" class="results-section">
+        
+      </section>
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
 </html>
