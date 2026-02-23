@@ -8,32 +8,37 @@ const OMDB_BASE_URL = 'https://www.omdbapi.com/';
 const searchMovies = async (query) => {
   const url = `${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&s=${query}`;
 
-  resultsContainer.innerHTML = '';
-  resultsContainer.textContent = 'Searching...';
+  resultsContainer.innerHTML = 'Searching...';
 
-  const response = await fetch(url);
-  const data = await response.json();
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
 
-  resultsContainer.innerHTML = '';
+    if (data.Response === 'True') {
+      const moviesHtml = data.Search.map((movie) => {
+        return `
+          <div class='movie-card'>
+            <h2>${movie.Title}</h2>
+            <p>${movie.Year}</p>
+          </div>
+        `;
+      }).join('');
+      
+      resultsContainer.innerHTML = moviesHtml;
 
-  if (data.Response === 'True') {
-    const moviesHtml = data.Search.map((movie) => {
-      return `
-        <div class='movie-card'>
-          <h2>${movie.Title}</h2>
-          <p>${movie.Year}</p>
-        </div>
-      `;
-    }).join('');
+    } else {
+      resultsContainer.innerHTML = `<p>${data.Error}</p>`;
+    }
 
-    resultsContainer.innerHTML = moviesHtml;
-  } else {
-    resultsContainer.innerHTML = `<p>${data.Error}</p>`;
+  } catch (error) {
+    resultsContainer.innerHTML = `<p>Something went wrong.</p>`;
+    console.error(error);
   }
-};
+}
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const searchValue = searchInput.value.trim();
 
   if (!searchValue) return;
