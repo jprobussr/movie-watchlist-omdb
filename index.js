@@ -3,41 +3,40 @@ const searchInput = document.getElementById('search-input');
 const resultsContainer = document.getElementById('results');
 
 const OMDB_API_KEY = 'a4345d16';
+const OMDB_BASE_URL = 'https://www.omdbapi.com/';
 
 const searchMovies = async (query) => {
-  try {
-    const response = await fetch(
-      `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}`,
-    );
+  const url = `${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&s=${query}`;
 
-    if (!response.ok) {
-      throw new Error('Request failed');
-    }
+  resultsContainer.innerHTML = '';
+  resultsContainer.textContent = 'Searching...';
 
-    const data = await response.json();
+  const response = await fetch(url);
+  const data = await response.json();
 
-    resultsContainer.innerHTML = '';
+  resultsContainer.innerHTML = '';
 
-    if (data.Response === 'True') {
-      data.Search.forEach((movie) => {
-        resultsContainer.innerHTML += `
-                    <div class='movie-card'>
-                        <h2>${movie.Title}</h2>
-                        <p>${movie.Year}</p>
-                    </div>
-                `;
-      });
-    } else {
-      resultsContainer.innerHTML = `<p>${data.Error}</p>`;
-    }
-  } catch (error) {
-    console.error('Error fetching movies:', err);
+  if (data.Response === 'True') {
+    const moviesHtml = data.Search.map((movie) => {
+      return `
+        <div class='movie-card'>
+          <h2>${movie.Title}</h2>
+          <p>${movie.Year}</p>
+        </div>
+      `;
+    }).join('');
+
+    resultsContainer.innerHTML = moviesHtml;
+  } else {
+    resultsContainer.innerHTML = `<p>${data.Error}</p>`;
   }
 };
 
 searchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  const searchValue = searchInput.value.trim();
 
-    const searchValue = searchInput.value.trim();
-    searchMovies(searchValue);
-})
+  if (!searchValue) return;
+
+  searchMovies(searchValue);
+});
