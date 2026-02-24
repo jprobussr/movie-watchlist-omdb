@@ -1,0 +1,12 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.movie-card img {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+}
