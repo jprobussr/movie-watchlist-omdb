@@ -6,7 +6,8 @@ const OMDB_API_KEY = 'a4345d16';
 const OMDB_BASE_URL = 'https://www.omdbapi.com/';
 
 const searchMovies = async (query) => {
-  const url = `${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&s=${query}`;
+  const safeQuery = encodeURIComponent(query);
+  const url = `${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&s=${safeQuery}`;
 
   resultsContainer.textContent = 'Searching...';
 
@@ -14,16 +15,15 @@ const searchMovies = async (query) => {
     const response = await fetch(url);
     const data = await response.json();
 
-    resultsContainer.innerHTML = '';
-
     if (data.Response === 'True') {
       const moviesHtml = data.Search.map((movie) => {
-        const poster = movie.Poster !== 'N/A' ? movie.Poster : '';
+        const poster =
+          movie.Poster !== 'N/A' ? movie.Poster : 'assets/no-poster.png';
 
         return `
           <div class='movie-card'>
-            <img
-              class='movie-poster'
+            <img 
+              class='card-poster'
               src='${poster}'
               alt='${movie.Title} poster'
               onerror="this.onerror=null; this.src='assets/no-poster.png';"
@@ -36,16 +36,17 @@ const searchMovies = async (query) => {
 
       resultsContainer.innerHTML = moviesHtml;
     } else {
-      resultsContainer.innerHTML = `<p>${data.Error}</p>`;
+      resultsContainer.textContent = data.Error;
     }
   } catch (error) {
-    resultsContainer.innerHTML = `<p>Something went wrong. Please try again.</p>`;
     console.error(error);
+    resultsContainer.textContent = 'Something went wrong.';
   }
 };
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const searchValue = searchInput.value.trim();
 
   if (!searchValue) return;
