@@ -2,7 +2,7 @@ const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const resultsContainer = document.getElementById('results');
 
-const OMDB_API_KEY = 'a4345d16';
+const OMDB_API_KEY = 'YOUR_API_KEY_HERE';
 const OMDB_BASE_URL = 'https://www.omdbapi.com/';
 
 const WATCHLIST_KEY = 'watchlist';
